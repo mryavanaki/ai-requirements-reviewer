@@ -1,0 +1,29 @@
+Title: Gift Card Redemption in E-commerce Checkout
+
+Description:
+The system should allow customers to redeem gift cards during the checkout process on the website or mobile app.
+
+Functional Requirements:
+1. The user should be able to enter a valid gift card number in the “Apply Gift Card” section during checkout.
+2. The system must validate the gift card against the existing gift card database to ensure it is active and has sufficient balance.
+3. If the card is valid, the balance should be applied to the total order amount, reducing the final payable amount.
+4. The system should display a confirmation message showing the gift card balance used and the remaining payable amount.
+5. The system should support partial redemption — any remaining balance should stay in the gift card for future use.
+6. The system must log all gift card redemptions for auditing purposes.
+
+Assumptions:
+- Gift cards are issued only in INR.
+- A user can apply only one gift card per transaction.
+
+Constraints:
+- The feature must be implemented within the existing checkout microservice.
+- The API should reuse the existing payment validation interface.
+
+Non-Functional Requirements:
+- The validation API must respond within 2 seconds.
+- The system should handle up to 1000 concurrent gift card validations.
+- All card numbers and transactions must be encrypted in transit and at rest.
+
+Open Questions:
+- Should users be allowed to redeem expired cards if they are reactivated by customer support?
+- What happens if the gift card API is temporarily unavailable during checkout?
