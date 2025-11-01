@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -26,10 +26,24 @@ function App() {
     }
   };
 
+  const fileInputRef = useRef(null);
+
+  const onLabelKeyDown = (e) => {
+    // allow Enter or Space to open file picker when label is focused
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fileInputRef.current && fileInputRef.current.click();
+    }
+  };
+
   return (
     <div className="app-root">
       <header className="app-header">
-        <div className="brand">
+        <div className="header-bg" aria-hidden>
+          <img src="/images/bannerImage.png" alt="Banner" />
+        </div>
+        <div className="header-content">
+          <div className="brand">
           <div className="logo" aria-hidden>
             {/* simple inline SVG logo */}
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,8 +63,19 @@ function App() {
         </div>
 
         <div className="controls">
-          <label className="file-label">
+          <label
+            className="file-label"
+            tabIndex={0}
+            onKeyDown={onLabelKeyDown}
+            onMouseDown={(e) => {
+              // Prevent the label from receiving focus on mouse click which can show a text caret.
+              // Instead, open the file picker directly.
+              e.preventDefault();
+              fileInputRef.current && fileInputRef.current.click();
+            }}
+          >
             <input
+              ref={fileInputRef}
               type="file"
               accept=".txt,.pdf,.docx"
               onChange={(e) => setFile(e.target.files[0])}
@@ -62,11 +87,20 @@ function App() {
             {loading ? <span className="spinner" /> : "Analyze"}
           </button>
         </div>
+        </div>
       </header>
 
       <main className="container">
         <section className="hero">
-          <h2>Upload a requirements document</h2>
+          <h2>
+            {file ? (
+              <>
+                Requirements document: <span className="filename" title={file.name}>{file.name}</span>
+              </>
+            ) : (
+              "Upload a requirements document"
+            )}
+          </h2>
           <p>Supported: .txt, .pdf, .docx — we’ll analyze clarity, completeness and detect ambiguities.</p>
         </section>
 

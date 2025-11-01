@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240" height="80" viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo placeholder">
+  <rect width="240" height="80" rx="12" fill="#0b1220" />
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#6EE7B7" />
+      <stop offset="1" stop-color="#3B82F6" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="64" height="64" rx="8" fill="url(#g)" />
+  <text x="86" y="46" font-family="Inter, Arial, sans-serif" font-size="18" fill="#dbeafe">AI Requirements</text>
+</svg>

@@ -68,15 +68,40 @@
 }
 
 .app-header {
+  /* Centered card-style header: constrained width and centered within the page */
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  background: var(--glass);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  /* set consistent top/bottom padding */
+  padding: 1.5rem 1.5rem;
+  min-height: 160px;
+  position: relative;
+  overflow: hidden;
+  /* visible thin white-contrast border on all four sides */
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
   backdrop-filter: blur(4px);
+  /* subtle inner highlight to keep a refined look */
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.015);
 }
+
+/* header background image placed as an <img> for reliable text visibility control */
+.app-header .header-bg { position: absolute; inset: 0; z-index: 0; }
+.app-header .header-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.app-header::after {
+  /* gradient overlay to ensure readability */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(2,6,23,0.5), rgba(2,6,23,0.25));
+  z-index: 1;
+  border-radius: inherit;
+}
+.app-header .header-content { position: relative; z-index: 2; display: flex; align-items:center; justify-content:space-between; width:100%; height: 220px; }
 
 .brand {
   display: flex;
@@ -89,6 +114,20 @@
 .tag { margin:0; font-size: 0.82rem; color: var(--muted); }
 
 .controls { display:flex; gap:0.6rem; align-items:center; }
+
+/* Position header controls absolutely so they can sit visually "below" elements
+   inside the header image (for example, below a progress bar drawn in the banner).
+   The controls are anchored to the bottom-right of the header card by default. */
+.header-content .controls {
+  /* align controls to the right side of the banner and lower them further */
+  position: absolute;
+  right: 28px;
+  bottom: 2px; /* placed 2px from bottom as requested */
+  transform: none;
+  margin: 0;
+  display: flex;
+  gap: 0.6rem;
+}
 .controls .file-label,
 .controls .btn.primary {
   /* unified button sizing for consistent appearance */
@@ -118,14 +157,39 @@
 .file-label:active { transform: translateY(0); }
 .file-label input { display: none; }
 
+.file-label:focus-visible {
+  outline: 3px solid rgba(59,130,246,0.18);
+  outline-offset: 3px;
+}
+
 .btn { border-radius:8px; border: none; cursor:pointer; font-weight:600; }
 .btn.primary { background: linear-gradient(90deg,#06b6d4,#3b82f6); color: white; box-shadow: 0 6px 18px rgba(59,130,246,0.18); }
+.btn.primary {
+  /* smooth transitions to match file-label */
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+.btn.primary:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(59,130,246,0.22); }
+.btn.primary:active { transform: translateY(0); }
+.btn.primary:focus-visible { outline: 3px solid rgba(59,130,246,0.18); outline-offset: 3px; }
 .btn:disabled { opacity:0.65; cursor:not-allowed; }
 
 .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
 .hero { text-align:left; margin-bottom:1rem; }
 .hero h2 { margin:0 0 0.25rem 0; color:#e6eef8; }
 .hero p { margin:0; color:var(--muted); }
+
+.filename {
+  color: #9be7c6;
+  font-weight: 600;
+  margin-left: 0.35rem;
+  display: inline-block;
+  max-width: 48ch; /* limit width to avoid wrapping */
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
 
 .result-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:1rem; margin-top:1rem; box-shadow: 0 8px 30px rgba(2,6,23,0.6); border: 1px solid rgba(255,255,255,0.03); }
 .result-card h3 { margin-top:0; color:#cfe9ff; }
@@ -141,7 +205,14 @@
 @media (max-width:700px) {
   .app-header { flex-direction:column; align-items:stretch; gap:0.75rem; }
   .controls { justify-content: flex-end; }
+  /* stacked layout: make controls flow in the document again */
+  .header-content .controls { position: static; margin-top: 0.75rem; right: auto; bottom: auto; transform: none; left: auto; }
   .container { padding: 0 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  /* ensure header remains full width within the app padding on very small screens */
+  .app-header { width: calc(100% - 1rem); margin: 0.5rem auto; padding: 1rem 0.75rem; min-height: 110px; background-position: center; background-size: cover; }
 }
 
 /* Ensure html/body/root expand so app-root covers entire screen on all setups */
